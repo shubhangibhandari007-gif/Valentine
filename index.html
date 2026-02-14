@@ -31,7 +31,7 @@ from{transform:translateY(100vh);}
 to{transform:translateY(-10vh);opacity:0;}
 }
 
-/* card */
+/* MAIN CARD */
 .container{
 width:min(960px,94%);
 margin:24px auto;
@@ -81,16 +81,41 @@ button:hover{transform:translateY(-2px);}
 .fadeIn{opacity:0;animation:fade 1.8s ease forwards;}
 @keyframes fade{to{opacity:1;}}
 
-/* mobile */
-@media(max-width:768px){
-.container{
-margin:10px auto;
-padding:18px 12px 26px;
+/* FINAL SECTION (OUTSIDE CARD) */
+#ending{
+text-align:center;
+margin:20px auto 60px;
+max-width:900px;
+display:none;
+padding:0 12px;
 }
-h1{font-size:2.5rem;}
-#text{font-size:1.12rem;line-height:1.55;}
-.final-photo{width:220px !important;}
-.final-line{font-size:1.5rem !important;}
+.final-photo{
+width:300px;
+border:10px solid #fff;
+box-shadow:0 10px 22px rgba(0,0,0,.25);
+transform:rotate(-3deg);
+}
+.final-line{
+font-family:'Dancing Script',cursive;
+font-size:2rem;
+margin-top:14px;
+color:#8a3b5d;
+}
+.final-text{
+white-space:pre-line;
+line-height:1.7;
+font-size:1.15rem;
+margin-top:16px;
+color:#5b2e2e;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+.container{margin:10px auto;padding:18px 12px 26px;}
+h1{font-size:2.4rem;}
+#text{font-size:1.1rem;}
+.final-photo{width:220px;}
+.final-line{font-size:1.5rem;}
 }
 </style>
 </head>
@@ -105,6 +130,8 @@ h1{font-size:2.5rem;}
 <div id="buttons"></div>
 </div>
 
+<div id="ending"></div>
+
 <audio id="bgMusic" src="music.mp3" loop></audio>
 <audio id="yesMusic" src="music-lyrics.mp3"></audio>
 
@@ -116,7 +143,7 @@ let h=document.createElement("div");
 h.className="heart";
 h.innerText="💗";
 h.style.left=Math.random()*100+"vw";
-h.style.fontSize=(14+Math.random()*16)+"px";
+h.style.fontSize=(14+Math.random()*14)+"px";
 document.getElementById("hearts").appendChild(h);
 setTimeout(()=>h.remove(),10000);
 },900);
@@ -152,13 +179,8 @@ text.className="memory";
 text.innerText=memories[index];
 buttons.innerHTML=`<button class="primary" onclick="next()">Continue ✨</button>`;
 }
-function next(){
-startMusic();
-index++;
-index<memories.length?showMemory():question();
-}
+function next(){startMusic();index++;index<memories.length?showMemory():question();}
 
-/* replay memories = single slide */
 function replay(){
 text.className="memory";
 text.innerText=`Our little memories… 💭
@@ -188,12 +210,7 @@ buttons.innerHTML=`
 }
 
 /* NO game */
-const noMsgs=[
-"Are you sure? 🥺",
-"This letter has feelings too…",
-"Okay but my heart already picked you.",
-"This No button is feeling shy now 🙈"
-];
+const noMsgs=["Are you sure? 🥺","This letter has feelings too…","Okay but my heart already picked you.","This No button is feeling shy now 🙈"];
 function noGame(){
 noCount++;
 text.innerText=noMsgs[Math.min(noCount-1,noMsgs.length-1)];
@@ -204,63 +221,12 @@ no.style.transform=`scale(${1-noCount*0.12})`;
 if(noCount>4) no.style.display="none";
 }
 
-function trap(){
-text.innerText="It is.\nA very cute emotional trap 😌💌";
-buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
-}
+function trap(){text.innerText="It is.\nA very cute emotional trap 😌💌";buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;}
+function reward(){text.innerText="A lifetime subscription to chaos, laughs, cuteness, hugs, and someone who keeps choosing you 🤍";buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;}
+function hint(){text.innerText="If someone builds a whole little website just to make you smile… that’s your hint 🤍";buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;}
+function think(){text.innerText="Of course… take your time 🥺";buttons.innerHTML=`<button onclick="question()">Back 💌</button>`;}
 
-function reward(){
-text.innerText=`You get...
-
-A lifetime subscription to chaos, laughs and cuteness 😄
-
-Baby talks, random runs, fun activities,
-creative little surprises, and basketball matches.
-
-Warm hugs, late-night cuddles,
-someone who feeds you food,
-and always saves you the last bite.
-
-Someone who keeps showing effort,
-tries to make you smile,
-and chooses you again and again 🤍`;
-buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
-}
-
-function hint(){
-text.innerText=`Hint? 👀
-
-If someone builds a whole little website
-just to make you smile…
-
-that’s probably the biggest hint already 🤍`;
-buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
-}
-
-function think(){
-text.innerText=`Of course, baby… take your time.
-
-But while you think…
-
-you probably won’t find this kind of crazy girl anywhere else 😄
-
-Soch lo… 🥺`;
-buttons.innerHTML=`
-<button onclick="dontWant()">I don’t want to 🙈</button>
-<button class="primary" onclick="wantYou()">I want you 🤍</button>`;
-}
-
-function wantYou(){
-text.innerText="Yaaay 😄💖\nNow go back and press YES 🤍";
-buttons.innerHTML=`<button class="primary" onclick="question()">Take me there ✨</button>`;
-}
-
-function dontWant(){
-text.innerText="Hmm… that option feels unfair 😌\nMaybe give the “I want you 🤍” button another look?";
-buttons.innerHTML=`<button class="primary" onclick="think()">Okay okay… back 💌</button>`;
-}
-
-/* YES ending */
+/* YES */
 function yes(){
 text.innerText="I knew it… you were always going to choose yes 😌🤍";
 buttons.innerHTML="";
@@ -282,35 +248,36 @@ showFinal();
 
 function showFinal(){
 
-const photo=document.createElement("img");
-photo.src="us.jpg";
-photo.className="final-photo";
-photo.style.cssText="width:300px;border:10px solid #fff;box-shadow:0 10px 22px rgba(0,0,0,.25);transform:rotate(-3deg);margin-top:10px;";
-document.querySelector(".container").appendChild(photo);
+const ending=document.getElementById("ending");
+ending.style.display="block";
 
-setTimeout(()=>{
-let line=document.createElement("div");
-line.className="fadeIn final-line";
-line.style.fontFamily="'Dancing Script',cursive";
-line.style.fontSize="2rem";
-line.style.marginTop="14px";
-line.style.color="#8a3b5d";
-line.innerText="From now on, let’s choose each other, and keep choosing, every day.";
-document.querySelector(".container").appendChild(line);
+ending.innerHTML=`
+<img src="us.jpg" class="final-photo fadeIn">
 
-let sign=document.createElement("div");
-sign.className="fadeIn";
-sign.style.marginTop="14px";
-sign.style.whiteSpace="pre-line";
-sign.style.color="#b07a8f";
-sign.innerText=`Beba, I like you 🐵
+<div class="final-line fadeIn">
+From now on, let’s choose each other, and keep choosing, every day.
+</div>
+
+<div class="final-text fadeIn">
+Little things you do that stay with me…
+
+I love the way you hold my hand while driving.
+The way you call me “Bacche” melts my heart every time.
+Your forehead kisses make me feel safe and cared for.
+The way you feed me feels like love in its simplest form.
+Your worn jackets feel like hugs from you, even when you’re far away.
+When you’re around, time runs too fast.
+When you’re away, it feels the longest.
+</div>
+
+<div class="final-text fadeIn" style="color:#b07a8f;font-size:1.05rem;">
+Beba, I like you 🐵
 I just wanted to make you smile.
-Made with love, by Potato 🤍`;
-document.querySelector(".container").appendChild(sign);
+Made with love, by Potato 🤍
+</div>
+`;
 
 window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
-
-},1200);
 }
 
 showMemory();
