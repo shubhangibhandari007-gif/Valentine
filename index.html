@@ -19,15 +19,11 @@ body{
 }
 
 /* floating hearts */
-#hearts{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-}
+#hearts{position:fixed;inset:0;pointer-events:none;}
 .heart{
     position:absolute;
     font-size:18px;
-    opacity:.2;
+    opacity:.22;
     animation:float 10s linear forwards;
 }
 @keyframes float{
@@ -35,7 +31,7 @@ body{
     to{transform:translateY(-10vh);opacity:0;}
 }
 
-/* scrapbook */
+/* scrapbook card */
 .container{
     width:min(1050px,95%);
     background:#fff8f3;
@@ -44,13 +40,7 @@ body{
     box-shadow:0 20px 45px rgba(0,0,0,.12);
     position:relative;
     text-align:center;
-    animation:cardIn .7s ease-out;
 }
-@keyframes cardIn{
-    from{opacity:0;transform:translateY(18px);}
-    to{opacity:1;transform:translateY(0);}
-}
-
 .container::before{
     content:"";
     position:absolute;
@@ -61,7 +51,6 @@ body{
     z-index:-1;
 }
 
-/* title */
 h1{
     font-family:'Dancing Script', cursive;
     font-size:4rem;
@@ -69,13 +58,11 @@ h1{
     margin:0 0 12px;
 }
 
-/* text */
 #text{
     max-width:760px;
     margin:0 auto 24px;
     font-size:1.45rem;
     line-height:1.8;
-    color:#5b2e2e;
     white-space:pre-line;
 }
 
@@ -85,7 +72,6 @@ h1{
     border:2px dashed #ffd0dc;
     padding:22px;
     border-radius:14px;
-    box-shadow:0 8px 16px rgba(0,0,0,.08);
 }
 
 /* buttons */
@@ -98,38 +84,15 @@ button{
     color:#5b2e2e;
     font-size:1.05rem;
     cursor:pointer;
-    box-shadow:0 6px 10px rgba(0,0,0,.08);
-    transform:rotate(-1deg);
     transition:.25s;
 }
-button:hover{transform:translateY(-3px) rotate(1deg);}
+button:hover{transform:translateY(-3px);}
 .primary{background:#ff5f7a;color:white;}
 
 .pulse{animation:pulse 1.4s ease infinite;}
 @keyframes pulse{
 0%,100%{transform:scale(1);}
 50%{transform:scale(1.08);}
-}
-
-/* ending */
-.polaroid-wrap{margin-top:18px;}
-.polaroid{
-    width:300px;
-    border:12px solid white;
-    box-shadow:0 12px 25px rgba(0,0,0,.25);
-    transform:rotate(-3deg);
-}
-
-.final-line{
-    font-family:'Dancing Script', cursive;
-    font-size:2.2rem;
-    margin-top:16px;
-    color:#8a3b5d;
-}
-.signature{
-    margin-top:10px;
-    white-space:pre-line;
-    color:#b07a8f;
 }
 </style>
 </head>
@@ -147,28 +110,26 @@ button:hover{transform:translateY(-3px) rotate(1deg);}
 <audio id="music" src="music.mp3"></audio>
 
 <script>
-/* floating hearts */
 setInterval(()=>{
- let h=document.createElement("div");
- h.className="heart";
- h.innerText="💗";
- h.style.left=Math.random()*100+"vw";
- h.style.fontSize=(14+Math.random()*14)+"px";
- document.getElementById("hearts").appendChild(h);
- setTimeout(()=>h.remove(),10000);
+let h=document.createElement("div");
+h.className="heart";
+h.innerText="💗";
+h.style.left=Math.random()*100+"vw";
+document.getElementById("hearts").appendChild(h);
+setTimeout(()=>h.remove(),10000);
 },900);
 
 const memories=[
 "I genuinely like you, more than I know how to say sometimes.",
 "Remember that magic trick you did?\nI couldn’t stop smiling after that.",
 "I still remember our run in Bhimtal,\nit felt simple and perfect.",
-"You standing outside my office with flowers,\nthat moment stayed with me.",
-"You wearing those cute sweaters I got you,\nlooked ridiculously adorable.",
-"And our dance on Tanna na na naah…\nI still replay it sometimes.",
+"Flowers outside my office.\nThat moment stayed with me.",
+"Cute sweaters.\nStill adorable.",
+"Our dance on Tanna na na naah…",
 "After all these little moments,\nI have one tiny question."
 ];
 
-let i=0;
+let i=0,noCount=0;
 const text=document.getElementById("text");
 const buttons=document.getElementById("buttons");
 
@@ -183,30 +144,64 @@ function question(){
 text.className="";
 text.innerText="So… will you be my Valentine? 💖";
 buttons.innerHTML=`
-<button class="primary" onclick="yes()">Yes 🤍</button>
-<button onclick="noSlide()">No 🙈</button>
+<button id="yesBtn" class="primary" onclick="yes()">Yes 🤍</button>
+<button id="noBtn" onclick="noGame()">No 🙈</button>
 <button onclick="hintSlide()">I need a hint 👀</button>
 <button onclick="thinkSlide()">Can I think about it? 🤔</button>
 <button onclick="rewardSlide()">Depends… what do I get? 😏</button>
 <button onclick="trapSlide()">This feels like a trap 😄</button>
 <button onclick="replay()">Replay memories 🧸</button>`;
+noCount=0;
 }
 
-/* separate slides */
+/* NO game */
+const noMessages=[
+"Are you sure? 🥺",
+"This letter has feelings too…",
+"Okay but my heart already picked you.",
+"This No button is feeling shy now 🙈"
+];
+
+function noGame(){
+noCount++;
+text.innerText=noMessages[Math.min(noCount-1,noMessages.length-1)];
+
+const yes=document.getElementById("yesBtn");
+const no=document.getElementById("noBtn");
+
+yes.style.transform=`scale(${1+noCount*0.15})`;
+no.style.transform=`scale(${1-noCount*0.15}) translate(${Math.random()*80-40}px,${Math.random()*40-20}px)`;
+
+if(noCount>4) no.style.display="none";
+}
+
+/* slides */
 function trapSlide(){
 text.innerText="It is.\nA very cute emotional trap 😌💌";
 buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
 }
-function hintSlide(){
-text.innerText="Hint?\nThink Bhimtal runs,\nmagic tricks,\ncozy sweaters,\nand flowers outside my office 🤍";
-buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
-}
+
 function rewardSlide(){
-text.innerText="You get chaos,\nlaughs,\ncuddles,\ncreative surprises,\nand someone who keeps showing up 🤍";
+text.innerText=`You get…
+
+A lifetime subscription to chaos, laughs and cuteness 😄
+
+Baby talks, random runs, fun activities,
+creative little surprises, and basketball matches.
+
+Warm hugs,
+late-night cuddles,
+someone who feeds you food,
+and always saves you the last bite.
+
+Someone who keeps showing effort,
+tries to make you smile,
+and chooses you again and again 🤍`;
 buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
 }
-function noSlide(){
-text.innerText="This option feels invalid 😌\nYou kinda have to choose me 🥺";
+
+function hintSlide(){
+text.innerText="Hint?\nThink Bhimtal runs,\nmagic tricks,\ncozy sweaters,\nand flowers 🤍";
 buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
 }
 
@@ -215,27 +210,33 @@ text.innerText=`Of course, baby… take your time.
 
 But while you think…
 
-you probably won’t find this kind of crazy girl anywhere else 😄
+you probably won’t find
+this kind of crazy girl anywhere else 😄
 
 Soch lo… 🥺`;
 buttons.innerHTML=`
 <button onclick="dontWant()">I don’t want to 🙈</button>
-<button class="primary pulse" onclick="question()">I want you 🤍</button>`;
+<button class="primary pulse" onclick="wantYou()">I want you 🤍</button>`;
+}
+
+function wantYou(){
+text.innerText=`Yaaay 😄💖
+
+Okay… now one tiny step left.
+
+Go back and click YES 🤍`;
+buttons.innerHTML=`<button class="primary" onclick="question()">Take me there ✨</button>`;
 }
 
 function dontWant(){
 text.innerText=`Hmm… that option feels unfair 😌
 
-I really want us to try,
-slowly and honestly,
-together 🥺
-
-Maybe give the “I want you 🤍” button another look…`;
-buttons.innerHTML=`<button class="primary" onclick="question()">Okay okay… back 💌</button>`;
+Maybe give the “I want you 🤍”
+button another look?`;
+buttons.innerHTML=`<button class="primary" onclick="thinkSlide()">Okay okay… back 💌</button>`;
 }
 
 function replay(){
-text.className="";
 text.innerText=`💭 Our little memories…
 
 • The magic trick you did.
@@ -252,27 +253,6 @@ function yes(){
 text.innerText="I knew it… you were always going to choose yes 😌🤍";
 buttons.innerHTML="";
 document.getElementById("music").play();
-
-setTimeout(()=>{
-let wrap=document.createElement("div");
-wrap.className="polaroid-wrap";
-wrap.innerHTML=`<img src="us.jpg" class="polaroid">`;
-document.querySelector(".container").appendChild(wrap);
-
-setTimeout(()=>{
-let line=document.createElement("div");
-line.className="final-line";
-line.innerText="From now on, let’s choose each other, and keep choosing, every day.";
-document.querySelector(".container").appendChild(line);
-
-let sign=document.createElement("div");
-sign.className="signature";
-sign.innerText=`Beba, I like you 🐵
-I just wanted to make you smile.
-Made with love, by Potato 🤍`;
-document.querySelector(".container").appendChild(sign);
-},2000);
-},400);
 }
 
 showMemory();
