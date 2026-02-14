@@ -11,7 +11,7 @@ body{
 margin:0;
 font-family:'Baloo 2',cursive;
 background:#f7f1f4;
-overflow-x:hidden;
+overflow-y:auto;
 
 display:flex;
 justify-content:center;   /* horizontal center */
@@ -56,32 +56,44 @@ margin:0 0 12px;
 
 #text{
 max-width:760px;
-margin:0 auto 20px;
-font-size:1.3rem;
-line-height:1.65;
+margin:0 auto 22px;
+font-size:1.45rem;
+line-height:1.75;
 white-space:pre-line;
+color:#4d3138;
 }
 
 .memory{
 background:#fffdf9;
 border:2px dashed #ffd0dc;
-border-radius:12px;
-padding:18px;
+border-radius:14px;
+padding:24px;
+box-shadow:0 4px 12px rgba(255,95,122,.08);
 }
 
 button{
-padding:10px 18px;
-margin:6px;
+padding:12px 22px;
+margin:8px;
 border:none;
-border-radius:10px;
+border-radius:14px;
 cursor:pointer;
-font-size:1rem;
-background:#ffe0ea;
+font-size:1.05rem;
+font-weight:600;
+background:#ffe8ef;
 color:#5b2e2e;
-transition:.25s;
+transition:all .25s ease;
+box-shadow:0 6px 14px rgba(255,95,122,.15);
 }
-button:hover{transform:translateY(-2px);}
-.primary{background:#ff5f7a;color:#fff;}
+
+button:hover{
+transform:translateY(-3px) scale(1.03);
+box-shadow:0 10px 20px rgba(255,95,122,.25);
+}
+
+.primary{
+background:linear-gradient(135deg,#ff6f8d,#ff4f72);
+color:#fff;
+}
 
 .fadeIn{opacity:0;animation:fade 1.8s ease forwards;}
 @keyframes fade{to{opacity:1;}}
