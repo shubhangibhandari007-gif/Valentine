@@ -15,11 +15,27 @@ body{
     align-items:center;
     font-family:'Baloo 2', cursive;
     background:#f7f1f4;
-    background-image:radial-gradient(rgba(255,255,255,.45) 1px, transparent 1px);
-    background-size:20px 20px;
+    overflow:hidden;
 }
 
-/* scrapbook card */
+/* floating hearts */
+#hearts{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+}
+.heart{
+    position:absolute;
+    font-size:18px;
+    opacity:.2;
+    animation:float 10s linear forwards;
+}
+@keyframes float{
+    from{transform:translateY(100vh);}
+    to{transform:translateY(-10vh);opacity:0;}
+}
+
+/* scrapbook */
 .container{
     width:min(1050px,95%);
     background:#fff8f3;
@@ -31,11 +47,10 @@ body{
     animation:cardIn .7s ease-out;
 }
 @keyframes cardIn{
-    from{opacity:0;transform:translateY(18px) scale(.98);}
-    to{opacity:1;transform:translateY(0) scale(1);}
+    from{opacity:0;transform:translateY(18px);}
+    to{opacity:1;transform:translateY(0);}
 }
 
-/* layered paper */
 .container::before{
     content:"";
     position:absolute;
@@ -51,35 +66,29 @@ h1{
     font-family:'Dancing Script', cursive;
     font-size:4rem;
     color:#b03a5b;
-    margin:0 0 10px;
-    transform:rotate(-1deg);
-    animation:titleFloat 3s ease-in-out infinite alternate;
-}
-@keyframes titleFloat{
-    from{transform:rotate(-1deg) translateY(0);}
-    to{transform:rotate(-1deg) translateY(-3px);}
+    margin:0 0 12px;
 }
 
-/* text area */
+/* text */
 #text{
-    margin:0 auto 16px;
-    min-height:70px;
     max-width:760px;
+    margin:0 auto 24px;
+    font-size:1.45rem;
+    line-height:1.8;
+    color:#5b2e2e;
+    white-space:pre-line;
 }
 
-/* scrapbook memory note */
+/* memory note */
 .memory-note{
     background:#fffdf9;
     border:2px dashed #ffd0dc;
     padding:22px;
     border-radius:14px;
-    font-size:1.35rem;
-    line-height:1.8;
-    color:#5b2e2e;
     box-shadow:0 8px 16px rgba(0,0,0,.08);
 }
 
-/* sticker buttons */
+/* buttons */
 button{
     padding:12px 20px;
     margin:8px;
@@ -93,41 +102,17 @@ button{
     transform:rotate(-1deg);
     transition:.25s;
 }
-button:hover{
-    transform:translateY(-3px) rotate(1deg);
-}
-button:active{transform:scale(.97);}
+button:hover{transform:translateY(-3px) rotate(1deg);}
+.primary{background:#ff5f7a;color:white;}
 
-.primary{
-    background:#ff5f7a;
-    color:white;
-}
-
-/* pulse UX secret */
-.pulse{
-    animation:pulse 1.4s ease infinite;
-}
+.pulse{animation:pulse 1.4s ease infinite;}
 @keyframes pulse{
-    0%{transform:scale(1);}
-    50%{transform:scale(1.08);}
-    100%{transform:scale(1);}
+0%,100%{transform:scale(1);}
+50%{transform:scale(1.08);}
 }
 
-/* polaroid */
-.polaroid-wrap{
-    display:inline-block;
-    margin-top:20px;
-    position:relative;
-}
-.tape{
-    width:90px;
-    height:20px;
-    background:rgba(255,255,255,.8);
-    position:absolute;
-    top:-12px;
-    left:50%;
-    transform:translateX(-50%) rotate(-3deg);
-}
+/* ending */
+.polaroid-wrap{margin-top:18px;}
 .polaroid{
     width:300px;
     border:12px solid white;
@@ -135,55 +120,52 @@ button:active{transform:scale(.97);}
     transform:rotate(-3deg);
 }
 
-/* ending */
 .final-line{
     font-family:'Dancing Script', cursive;
     font-size:2.2rem;
-    color:#8a3b5d;
     margin-top:16px;
-    animation:fadeIn 1.3s ease forwards;
+    color:#8a3b5d;
 }
 .signature{
     margin-top:10px;
-    color:#b07a8f;
-    line-height:1.7;
     white-space:pre-line;
-    animation:fadeIn 1.3s ease forwards;
-}
-@keyframes fadeIn{
-    from{opacity:0;transform:translateY(8px);}
-    to{opacity:1;transform:translateY(0);}
-}
-
-/* emotional fade */
-.memory-fade{
-    opacity:.25;
-    transform:scale(.97);
-    transition:.8s;
+    color:#b07a8f;
 }
 </style>
 </head>
 
 <body>
 
+<div id="hearts"></div>
+
 <div class="container">
 <h1>Ravi… 💖</h1>
-<div id="text" class="memory-note"></div>
+<div id="text"></div>
 <div id="buttons"></div>
 </div>
 
 <audio id="music" src="music.mp3"></audio>
 
 <script>
+/* floating hearts */
+setInterval(()=>{
+ let h=document.createElement("div");
+ h.className="heart";
+ h.innerText="💗";
+ h.style.left=Math.random()*100+"vw";
+ h.style.fontSize=(14+Math.random()*14)+"px";
+ document.getElementById("hearts").appendChild(h);
+ setTimeout(()=>h.remove(),10000);
+},900);
+
 const memories=[
-"Beba… it actually took me a lot to build this little website.",
 "I genuinely like you, more than I know how to say sometimes.",
-"Cutiepie, remember that magic trick you did? I couldn’t stop smiling after that.",
-"I still remember our run in Bhimtal, it felt simple and perfect.",
-"You standing outside my office with flowers, that moment stayed with me.",
-"Sweetie, you wearing those cute sweaters I got you looked ridiculously adorable.",
-"And our dance on Tanna na na naah, I still replay it in my head sometimes.",
-"After all these little moments, I have one tiny question."
+"Remember that magic trick you did?\nI couldn’t stop smiling after that.",
+"I still remember our run in Bhimtal,\nit felt simple and perfect.",
+"You standing outside my office with flowers,\nthat moment stayed with me.",
+"You wearing those cute sweaters I got you,\nlooked ridiculously adorable.",
+"And our dance on Tanna na na naah…\nI still replay it sometimes.",
+"After all these little moments,\nI have one tiny question."
 ];
 
 let i=0;
@@ -199,22 +181,63 @@ function next(){ i++; i<memories.length?showMemory():question(); }
 
 function question(){
 text.className="";
-text.style.fontSize="1.35rem";
 text.innerText="So… will you be my Valentine? 💖";
 buttons.innerHTML=`
 <button class="primary" onclick="yes()">Yes 🤍</button>
-<button onclick="no()">No 🙈</button>
-<button onclick="hint()">I need a hint 👀</button>
-<button onclick="think()">Can I think about it? 🤔</button>
-<button onclick="reward()">Depends… what do I get? 😏</button>
-<button onclick="trap()">This feels like a trap 😄</button>
+<button onclick="noSlide()">No 🙈</button>
+<button onclick="hintSlide()">I need a hint 👀</button>
+<button onclick="thinkSlide()">Can I think about it? 🤔</button>
+<button onclick="rewardSlide()">Depends… what do I get? 😏</button>
+<button onclick="trapSlide()">This feels like a trap 😄</button>
 <button onclick="replay()">Replay memories 🧸</button>`;
 }
 
+/* separate slides */
+function trapSlide(){
+text.innerText="It is.\nA very cute emotional trap 😌💌";
+buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
+}
+function hintSlide(){
+text.innerText="Hint?\nThink Bhimtal runs,\nmagic tricks,\ncozy sweaters,\nand flowers outside my office 🤍";
+buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
+}
+function rewardSlide(){
+text.innerText="You get chaos,\nlaughs,\ncuddles,\ncreative surprises,\nand someone who keeps showing up 🤍";
+buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
+}
+function noSlide(){
+text.innerText="This option feels invalid 😌\nYou kinda have to choose me 🥺";
+buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
+}
+
+function thinkSlide(){
+text.innerText=`Of course, baby… take your time.
+
+But while you think…
+
+you probably won’t find this kind of crazy girl anywhere else 😄
+
+Soch lo… 🥺`;
+buttons.innerHTML=`
+<button onclick="dontWant()">I don’t want to 🙈</button>
+<button class="primary pulse" onclick="question()">I want you 🤍</button>`;
+}
+
+function dontWant(){
+text.innerText=`Hmm… that option feels unfair 😌
+
+I really want us to try,
+slowly and honestly,
+together 🥺
+
+Maybe give the “I want you 🤍” button another look…`;
+buttons.innerHTML=`<button class="primary" onclick="question()">Okay okay… back 💌</button>`;
+}
+
 function replay(){
+text.className="";
 text.innerText=`💭 Our little memories…
 
-• It took me a lot to build this website.
 • The magic trick you did.
 • Our Bhimtal run.
 • Flowers outside my office.
@@ -225,46 +248,30 @@ Some moments just feel like us 🤍`;
 buttons.innerHTML=`<button class="primary" onclick="question()">Back to the question 💌</button>`;
 }
 
-function hint(){text.innerText="Hint? Think Bhimtal runs, magic tricks, cozy sweaters and flowers outside my office 🤍";}
-function reward(){text.innerText="Chaos, laughs, cuddles, last bites, creative surprises and someone who keeps showing up 🤍";}
-function trap(){text.innerText="It is. A very cute emotional trap 😌💌";}
-function no(){text.innerText="This option feels invalid 😌 You kinda have to choose me 🥺";}
-
-function think(){
-text.innerText="Of course, baby… take your time. But while you think, you probably won’t find this kind of crazy girl anywhere else 😄 Soch lo… 🥺";
-buttons.innerHTML=`
-<button onclick="dontWant()">I don’t want to 🙈</button>
-<button class="primary pulse" onclick="question()">I want you 🤍</button>`;
-}
-function dontWant(){
-text.innerText="Hmm… that option feels unfair 😌 I really want us to try, slowly and honestly, together 🥺 Maybe give the “I want you 🤍” button another look… just saying 🥺";
-buttons.innerHTML=`<button class="primary" onclick="question()">Okay okay… back 💌</button>`;
-}
-
 function yes(){
 text.innerText="I knew it… you were always going to choose yes 😌🤍";
 buttons.innerHTML="";
-text.classList.add("memory-fade");
 document.getElementById("music").play();
 
 setTimeout(()=>{
-const wrap=document.createElement("div");
+let wrap=document.createElement("div");
 wrap.className="polaroid-wrap";
-wrap.innerHTML=`<div class="tape"></div><img src="us.jpg" class="polaroid">`;
+wrap.innerHTML=`<img src="us.jpg" class="polaroid">`;
 document.querySelector(".container").appendChild(wrap);
 
 setTimeout(()=>{
-const line=document.createElement("div");
+let line=document.createElement("div");
 line.className="final-line";
 line.innerText="From now on, let’s choose each other, and keep choosing, every day.";
 document.querySelector(".container").appendChild(line);
 
-const sign=document.createElement("div");
+let sign=document.createElement("div");
 sign.className="signature";
-sign.innerText="Beba, I like you 🐵\nI just wanted to make you smile.\nMade with love, by Potato 🤍";
+sign.innerText=`Beba, I like you 🐵
+I just wanted to make you smile.
+Made with love, by Potato 🤍`;
 document.querySelector(".container").appendChild(sign);
 },2000);
-
 },400);
 }
 
