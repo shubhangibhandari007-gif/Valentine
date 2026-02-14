@@ -2,232 +2,225 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>For Ravi 💖</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 body{
 margin:0;
-font-family:'Baloo 2',cursive;
-background:#f7f1f4;
+font-family:'Nunito',sans-serif;
+background:#f4eef3;
+color:#4a2c3a;
 overflow-x:hidden;
-}
-
-/* floating hearts */
-#hearts{
-position:fixed;
-inset:0;
-pointer-events:none;
-z-index:-1;
-}
-.heart{
-position:absolute;
-opacity:.15;
-animation:float 10s linear forwards;
-}
-@keyframes float{
-from{transform:translateY(100vh);}
-to{transform:translateY(-10vh);opacity:0;}
-}
-
-/* MAIN CARD */
-.container{
-width:min(960px,94%);
-margin:24px auto;
-background:#fff8f3;
-border-radius:20px;
-padding:26px 22px 34px;
-box-shadow:0 16px 35px rgba(0,0,0,.12);
-text-align:center;
 }
 
 h1{
 font-family:'Dancing Script',cursive;
-font-size:3.6rem;
-color:#b03a5b;
-margin:0 0 12px;
+font-size:3.2rem;
+color:#a5446d;
+margin:0 0 15px;
+}
+
+.container{
+max-width:900px;
+margin:30px auto;
+background:#f8f4f2;
+border-radius:24px;
+padding:30px 20px 40px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+text-align:center;
 }
 
 #text{
-max-width:760px;
-margin:0 auto 20px;
-font-size:1.3rem;
-line-height:1.65;
-white-space:pre-line;
-}
-
-.memory{
-background:#fffdf9;
-border:2px dashed #ffd0dc;
-border-radius:12px;
-padding:18px;
+font-size:1.35rem;
+line-height:1.8;
+margin:20px auto;
+max-width:700px;
 }
 
 button{
-padding:10px 18px;
-margin:6px;
+padding:12px 26px;
+margin:8px;
 border:none;
-border-radius:10px;
-cursor:pointer;
+border-radius:999px;
+background:#e05a7a;
+color:white;
 font-size:1rem;
-background:#ffe0ea;
-color:#5b2e2e;
+cursor:pointer;
 transition:.25s;
+font-weight:700;
 }
-button:hover{transform:translateY(-2px);}
-.primary{background:#ff5f7a;color:#fff;}
+button:hover{transform:scale(1.05);}
 
-.fadeIn{opacity:0;animation:fade 1.8s ease forwards;}
-@keyframes fade{to{opacity:1;}}
+.option{
+background:#f0d7e0;
+color:#5b2f43;
+}
 
-/* FINAL SECTION (OUTSIDE CARD) */
 #ending{
-text-align:center;
-margin:20px auto 60px;
-max-width:900px;
 display:none;
-padding:0 12px;
+text-align:center;
+padding:30px 15px 50px;
 }
+
 .final-photo{
-width:300px;
-border:10px solid #fff;
-box-shadow:0 10px 22px rgba(0,0,0,.25);
+width:min(340px,85vw);
+border:14px solid white;
+box-shadow:0 10px 25px rgba(0,0,0,.2);
 transform:rotate(-3deg);
+margin:20px auto;
+display:block;
 }
+
 .final-line{
 font-family:'Dancing Script',cursive;
 font-size:2rem;
-margin-top:14px;
-color:#8a3b5d;
-}
-.final-text{
-white-space:pre-line;
-line-height:1.7;
-font-size:1.15rem;
-margin-top:16px;
-color:#5b2e2e;
+color:#8a4060;
+margin:18px auto;
+max-width:800px;
+line-height:1.4;
 }
 
-/* MOBILE */
+.final-text{
+max-width:700px;
+margin:20px auto;
+font-size:1.15rem;
+line-height:1.8;
+}
+
+.fadeIn{
+animation:fadeIn 1.2s ease forwards;
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(20px);}
+to{opacity:1;transform:translateY(0);}
+}
+
 @media(max-width:768px){
-.container{margin:10px auto;padding:18px 12px 26px;}
-h1{font-size:2.4rem;}
-#text{font-size:1.1rem;}
-.final-photo{width:220px;}
-.final-line{font-size:1.5rem;}
+h1{font-size:2.6rem;}
+#text{font-size:1.15rem;}
+.final-line{font-size:1.6rem;}
+.final-text{font-size:1rem;}
 }
 </style>
 </head>
 
 <body>
 
-<div id="hearts"></div>
+<!-- MUSIC -->
+<audio id="bgMusic" loop>
+<source src="music.mp3" type="audio/mp3">
+</audio>
 
-<div class="container">
+<audio id="yesMusic">
+<source src="music-lyrics.mp3" type="audio/mp3">
+</audio>
+
+<div class="container" id="mainCard">
+
 <h1>Ravi… 💖</h1>
 <div id="text"></div>
-<div id="buttons"></div>
+
+<button id="nextBtn">Continue ✨</button>
+
+<div id="buttons" style="display:none;">
+<button onclick="yes()">Yes 🤍</button>
+<button class="option" onclick="noClick()">No 🙈</button>
+<button class="option" onclick="hint()">I need a hint 👀</button>
+<button class="option" onclick="depends()">Depends… what do I get? 😉</button>
+<button class="option" onclick="replay()">Replay memories 🧸</button>
+</div>
+
 </div>
 
 <div id="ending"></div>
 
-<audio id="bgMusic" src="music.mp3" loop></audio>
-<audio id="yesMusic" src="music-lyrics.mp3"></audio>
-
 <script>
 
-/* floating hearts */
-setInterval(()=>{
-let h=document.createElement("div");
-h.className="heart";
-h.innerText="💗";
-h.style.left=Math.random()*100+"vw";
-h.style.fontSize=(14+Math.random()*14)+"px";
-document.getElementById("hearts").appendChild(h);
-setTimeout(()=>h.remove(),10000);
-},900);
-
-/* music */
-let started=false;
-function startMusic(){
-if(!started){
-let m=document.getElementById("bgMusic");
-m.volume=.10;
-m.play();
-started=true;
-}
-}
-
-/* memories */
 const memories=[
 "I genuinely like you, more than I know how to say sometimes.",
-"Remember that magic trick you did?\nI couldn’t stop smiling after that.",
-"I still remember our run in Bhimtal.\nIt felt simple and perfect.",
-"You standing outside my office with flowers.\nThat moment stayed with me.",
-"You wearing those cute sweaters I got you.\nStill adorable.",
-"Our dance on Tanna na na naah…\nI still replay it in my head sometimes.",
-"After all these little moments,\nI have one tiny question."
+"The magic trick you did… still makes me smile.",
+"Our Bhimtal run felt simple and perfect.",
+"You standing outside my office with flowers… unforgettable.",
+"Cute sweaters… still adorable.",
+"Our dance on Tanna na na naah… still replaying in my head.",
+"After all these little moments… I have one tiny question."
 ];
 
-let index=0,noCount=0;
+let index=0;
+let noCount=0;
+
 const text=document.getElementById("text");
+const nextBtn=document.getElementById("nextBtn");
 const buttons=document.getElementById("buttons");
 
-function showMemory(){
-text.className="memory";
+text.innerText=memories[0];
+
+// start music after first click (mobile safe)
+nextBtn.addEventListener("click",()=>{
+let bg=document.getElementById("bgMusic");
+if(bg.paused){bg.volume=0.18;bg.play();}
+});
+
+nextBtn.onclick=()=>{
+index++;
+if(index<memories.length){
 text.innerText=memories[index];
-buttons.innerHTML=`<button class="primary" onclick="next()">Continue ✨</button>`;
+}else{
+text.innerText="So… will you be my Valentine? 💖";
+nextBtn.style.display="none";
+buttons.style.display="block";
 }
-function next(){startMusic();index++;index<memories.length?showMemory():question();}
+};
+
+function noClick(){
+const msgs=[
+"Are you sure? 🥺",
+"This letter has feelings too…",
+"Okay but my heart already picked you.",
+"This No button is feeling shy now 🙈"
+];
+text.innerText=msgs[Math.min(noCount,msgs.length-1)];
+noCount++;
+}
+
+function hint(){
+text.innerText="Hint: someone already likes you a lot… 🥺🤍";
+}
+
+function depends(){
+text.innerText=
+`You get…
+
+A lifetime subscription to chaos, laughs and cuteness 😄
+
+Baby talks, random runs, fun activities, creative surprises and basketball matches.
+
+Warm hugs, late-night cuddles,
+someone who feeds you food,
+and always saves you the last bite.
+
+Someone who keeps choosing you again and again 🤍`;
+}
 
 function replay(){
-text.className="memory";
-text.innerText=`Our little memories… 💭
+text.innerText=
+`Our little memories…
 
-• The magic trick you did.
-• Our Bhimtal run.
-• Flowers outside my office.
-• Cute sweaters.
-• Our dance on Tanna na na naah.
+• The magic trick you did  
+• Our Bhimtal run  
+• Flowers outside my office  
+• Cute sweaters  
+• Our dance on Tanna na na naah  
 
 Some moments just feel like us 🤍`;
-buttons.innerHTML=`<button class="primary" onclick="question()">Back to the question 💌</button>`;
 }
 
-/* question */
-function question(){
-text.className="";
-text.innerText="So… will you be my Valentine? 💖";
-buttons.innerHTML=`
-<button id="yesBtn" class="primary" onclick="yes()">Yes 🤍</button>
-<button id="noBtn" onclick="noGame()">No 🙈</button>
-<button onclick="hint()">I need a hint 👀</button>
-<button onclick="think()">Can I think about it? 🤔</button>
-<button onclick="reward()">Depends… what do I get? 😏</button>
-<button onclick="trap()">This feels like a trap 😄</button>
-<button onclick="replay()">Replay memories 🧸</button>`;
-}
-
-/* NO game */
-const noMsgs=["Are you sure? 🥺","This letter has feelings too…","Okay but my heart already picked you.","This No button is feeling shy now 🙈"];
-function noGame(){
-noCount++;
-text.innerText=noMsgs[Math.min(noCount-1,noMsgs.length-1)];
-let yes=document.getElementById("yesBtn");
-let no=document.getElementById("noBtn");
-yes.style.transform=`scale(${1+noCount*0.15})`;
-no.style.transform=`scale(${1-noCount*0.12})`;
-if(noCount>4) no.style.display="none";
-}
-
-function trap(){text.innerText="It is.\nA very cute emotional trap 😌💌";buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;}
-function reward(){text.innerText="A lifetime subscription to chaos, laughs, cuteness, hugs, and someone who keeps choosing you 🤍";buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;}
-function hint(){text.innerText="If someone builds a whole little website just to make you smile… that’s your hint 🤍";buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;}
-function think(){text.innerText="Of course… take your time 🥺";buttons.innerHTML=`<button onclick="question()">Back 💌</button>`;}
-
-/* YES */
 function yes(){
+
 text.innerText="I knew it… you were always going to choose yes 😌🤍";
 buttons.innerHTML="";
 
@@ -235,12 +228,16 @@ let bg=document.getElementById("bgMusic");
 let lyrics=document.getElementById("yesMusic");
 
 let fade=setInterval(()=>{
-if(bg.volume>0.05) bg.volume-=0.015;
-else{
+if(bg.volume>0.05){
+bg.volume-=0.015;
+}else{
 clearInterval(fade);
 bg.pause();
-lyrics.volume=.28;
+
+lyrics.volume=0.28;
 lyrics.play();
+
+document.getElementById("mainCard").style.display="none";
 showFinal();
 }
 },120);
@@ -252,6 +249,12 @@ const ending=document.getElementById("ending");
 ending.style.display="block";
 
 ending.innerHTML=`
+<h1>Ravi… 💖</h1>
+
+<div style="font-size:1.3rem;font-weight:700;">
+I knew it… you were always going to choose yes 😌🤍
+</div>
+
 <img src="us.jpg" class="final-photo fadeIn">
 
 <div class="final-line fadeIn">
@@ -261,26 +264,22 @@ From now on, let’s choose each other, and keep choosing, every day.
 <div class="final-text fadeIn">
 Little things you do that stay with me…
 
-I love the way you hold my hand while driving.
-The way you call me “Bacche” melts my heart every time.
-Your forehead kisses make me feel safe and cared for.
-The way you feed me feels like love in its simplest form.
-Your worn jackets feel like hugs from you, even when you’re far away.
-When you’re around, time runs too fast.
+I love the way you hold my hand while driving.  
+The way you call me “Bacche” melts my heart every time.  
+Your forehead kisses make me feel safe and cared for.  
+The way you feed me feels like love in its simplest form.  
+Your worn jackets feel like hugs from you, even when you’re far away.  
+When you’re around, time runs too fast.  
 When you’re away, it feels the longest.
 </div>
 
-<div class="final-text fadeIn" style="color:#b07a8f;font-size:1.05rem;">
-Beba, I like you 🐵
-I just wanted to make you smile.
+<div class="final-text fadeIn" style="color:#b07a8f;">
+Beba, I like you 🐵  
+I just wanted to make you smile.  
 Made with love, by Potato 🤍
 </div>
 `;
-
-window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
 }
-
-showMemory();
 </script>
 
 </body>
