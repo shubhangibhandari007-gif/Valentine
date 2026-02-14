@@ -15,7 +15,7 @@ body{
     align-items:center;
     overflow:hidden;
     font-family:'Baloo 2', cursive;
-    background:linear-gradient(-45deg,#ffdfe6,#ffeef2,#fff6f8,#ffd9e3);
+    background:linear-gradient(-45deg,#ffe7ee,#fff3f6,#fff8fa,#ffe9f0);
     background-size:400% 400%;
     animation:bgMove 18s ease infinite;
 }
@@ -25,56 +25,76 @@ body{
     100%{background-position:0% 50%;}
 }
 
-/* floating hearts */
-#hearts{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-}
-.heart{
+/* doodle hearts */
+#hearts{position:fixed;inset:0;pointer-events:none;}
+.doodle{
     position:absolute;
-    opacity:.5;
-    animation:float 10s linear forwards;
+    width:20px;height:20px;
+    border:2px solid #ff6b8a;
+    border-top:none;border-right:none;
+    transform:rotate(-45deg);
+    opacity:.35;
+    animation:float 12s linear forwards;
 }
+.doodle::before,.doodle::after{
+    content:"";
+    position:absolute;
+    width:20px;height:20px;
+    border:2px solid #ff6b8a;
+    border-radius:50%;
+}
+.doodle::before{top:-10px;left:0;}
+.doodle::after{left:10px;top:0;}
 @keyframes float{
-    from{transform:translateY(100vh);}
-    to{transform:translateY(-10vh);opacity:0;}
+    from{transform:translateY(100vh) rotate(-45deg);}
+    to{transform:translateY(-10vh) rotate(-45deg);opacity:0;}
 }
 
-/* card */
+/* scrapbook card */
 .container{
-    width:min(900px,92%);
-    background:#fff8f2;
-    border-radius:20px;
-    padding:32px 40px;
-    box-shadow:0 15px 40px rgba(0,0,0,.12);
+    width:min(860px,92%);
+    background:#fffaf5;
+    border-radius:22px;
+    padding:30px 38px;
+    box-shadow:0 16px 35px rgba(0,0,0,.12);
     text-align:center;
     position:relative;
     z-index:2;
 }
-.container::before,
-.container::after{
-    content:"❤️";
+.container::before{
+    content:"";
     position:absolute;
-    font-size:22px;
+    inset:-10px;
+    background:#fff2f6;
+    border-radius:24px;
+    z-index:-1;
+    transform:rotate(-1deg);
 }
-.container::before{top:15px;left:20px;}
-.container::after{bottom:15px;right:20px;}
 
 h1{
     font-family:'Dancing Script', cursive;
-    font-size:3.5rem;
+    font-size:3.4rem;
     color:#b03a5b;
-    margin-bottom:10px;
+    margin-bottom:8px;
 }
 
 #text{
-    font-size:1.35rem;
-    line-height:1.9;
-    max-width:700px;
-    margin:0 auto 18px;
-    color:#5b2e2e;
+    margin:0 auto 16px;
     min-height:70px;
+}
+
+/* memory notes */
+.memory-note{
+    background:#fffdf8;
+    border:2px dashed #ffd0dc;
+    padding:18px 20px;
+    border-radius:12px;
+    max-width:650px;
+    box-shadow:0 6px 12px rgba(0,0,0,.08);
+    font-size:1.25rem;
+    line-height:1.8;
+    color:#5b2e2e;
+    transition:.3s;
 }
 
 /* buttons */
@@ -85,40 +105,29 @@ button{
     border-radius:25px;
     cursor:pointer;
     font-size:1rem;
-    font-family:'Baloo 2', cursive;
     transition:.25s;
 }
-button:hover{
-    transform:scale(1.08) rotate(-1deg);
-}
-.primary{
-    background:#ff5f7a;
-    color:white;
-}
-.soft{
-    background:#ffd6df;
-    color:#5b2e2e;
+button:hover{transform:translateY(-2px) scale(1.05);}
+.primary{background:#ff5f7a;color:white;}
+.soft{background:#ffdbe5;color:#5b2e2e;}
+
+.pulse{animation:pulseBtn 1.4s ease-in-out infinite;}
+@keyframes pulseBtn{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.08);}
+    100%{transform:scale(1);}
 }
 
 /* polaroid */
-.polaroid-wrap{
-    display:inline-block;
-    position:relative;
-    margin-top:20px;
-}
+.polaroid-wrap{display:inline-block;position:relative;margin-top:20px;}
 .tape{
-    width:90px;
-    height:20px;
+    width:90px;height:20px;
     background:rgba(255,255,255,.7);
-    position:absolute;
-    top:-12px;
-    left:50%;
+    position:absolute;top:-12px;left:50%;
     transform:translateX(-50%) rotate(-2deg);
-    border-radius:4px;
 }
 .polaroid{
-    width:280px;
-    border:12px solid white;
+    width:280px;border:12px solid white;
     box-shadow:0 10px 25px rgba(0,0,0,.25);
     transform:rotate(-3deg);
 }
@@ -132,9 +141,24 @@ button:hover{
     opacity:0;
     animation:fadeLine 1.4s ease forwards;
 }
+.signature{
+    margin-top:8px;
+    font-size:1rem;
+    color:#b07a8f;
+    opacity:0;
+    animation:fadeLine 1.4s ease forwards;
+    animation-delay:.5s;
+}
 @keyframes fadeLine{
-    from{opacity:0; transform:translateY(8px);}
-    to{opacity:1; transform:translateY(0);}
+    from{opacity:0;transform:translateY(8px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+/* memory fade */
+.memory-fade{
+    opacity:.25;
+    transform:scale(.96);
+    transition:all .8s ease;
 }
 </style>
 </head>
@@ -144,25 +168,21 @@ button:hover{
 <div id="hearts"></div>
 
 <div class="container">
-    <h1>Ravi… 🤎</h1>
-    <div id="text"></div>
-    <div id="buttons"></div>
+<h1>Ravi… 💖</h1>
+<div id="text" class="memory-note"></div>
+<div id="buttons"></div>
 </div>
 
 <audio id="music" src="music.mp3"></audio>
 
 <script>
-/* floating hearts */
 setInterval(()=>{
-    const h=document.createElement("div");
-    h.className="heart";
-    h.innerHTML="💞";
-    h.style.left=Math.random()*100+"vw";
-    h.style.fontSize=(14+Math.random()*18)+"px";
-    h.style.animationDuration=(7+Math.random()*5)+"s";
-    document.getElementById("hearts").appendChild(h);
-    setTimeout(()=>h.remove(),12000);
-},800);
+ const h=document.createElement("div");
+ h.className="doodle";
+ h.style.left=Math.random()*100+"vw";
+ document.getElementById("hearts").appendChild(h);
+ setTimeout(()=>h.remove(),13000);
+},900);
 
 const memories=[
 "Beba… it actually took me a lot to build this little website.",
@@ -175,61 +195,35 @@ const memories=[
 "After all these little moments, I have one tiny question."
 ];
 
-let i=0,noCount=0,playful=0;
+let i=0,noCount=0;
 const text=document.getElementById("text");
 const buttons=document.getElementById("buttons");
 
 function showMemory(){
-    text.innerText=memories[i];
-    buttons.innerHTML=`<button class="primary" onclick="next()">Continue ✨</button>`;
+text.className="memory-note";
+text.innerText=memories[i];
+buttons.innerHTML=`<button class="primary" onclick="next()">Continue ✨</button>`;
 }
 function next(){ i++; i<memories.length?showMemory():question(); }
 
 function question(){
+text.className="";
+text.style.fontSize="1.35rem";
 text.innerText="So… will you be my Valentine? 💖";
-buttons.innerHTML=`
-<button class="primary" onclick="yes()">Yes 🤍</button>
-<button class="soft" onclick="no()" id="noBtn">No 🙈</button>
-<button class="soft" onclick="reward('Hint? Think Bhimtal runs, magic tricks, cozy sweaters, and flowers outside my office. Your answer might already be hidden there 🤍')">I need a hint 👀</button>
-<button class="soft" onclick="think()">Can I think about it? 🤔</button>
-<button class="soft" onclick="reward('You get chaos, laughs, cuteness, baby talks, random runs, creative adventures, basketball matches, warm hugs, late night cuddles, saved last bites, and someone who keeps showing up with effort every day 🤍')">Depends… what do I get? 😏</button>
-<button class="soft" onclick="reward('It is. A very cute emotional trap 😌💌')">This feels like a trap 😄</button>
+buttons.innerHTML=`<button class="primary" onclick="yes()">Yes 🤍</button>
+<button class="soft" onclick="no()">No 🙈</button>
 <button class="soft" onclick="replay()">Replay memories 🧸</button>`;
 }
 
-function think(){
-text.innerText="Of course, baby… take your time.\nBut while you think, you probably won’t find this kind of crazy girl anywhere else 😄\nSoch lo… 🥺";
-buttons.innerHTML=`
-<button class="soft" onclick="dontWant()">I don’t want to 🙈</button>
-<button class="primary" onclick="wantYou()">I want you 🤍</button>`;
-}
-
-function dontWant(){
-text.innerText="Hmm… that option feels unfair 😌\nI really want us to try, slowly and honestly, together 🥺\nMaybe give the I want you option another look?";
-buttons.innerHTML=`<button class="primary" onclick="question()">Okay okay… back 💌</button>`;
-}
-
-function wantYou(){
-text.innerText="Yeah… that sounds right 😌🤍";
-buttons.innerHTML=`<button class="primary" onclick="question()">Back to options 💖</button>`;
-}
-
-function reward(msg){
-playful++;
-text.innerText=msg;
-if(playful>=3){
-text.innerText+="\n\nYou keep exploring… that’s very you 😄\nSo… what does your heart say now?";
-}
+function replay(){
+text.className="";
+text.style.fontSize="1.2rem";
+text.innerText="💭 Our little memories…\n\n• It took me a lot to build this website.\n• That magic trick you did.\n• Our Bhimtal run.\n• Flowers outside my office.\n• Cute sweaters.\n• Our dance.\n\nSome moments just feel like us 🤍";
 buttons.innerHTML=`<button class="primary" onclick="question()">Back to the question 💌</button>`;
 }
 
-function replay(){ i=0; playful=0; showMemory(); }
-
 function no(){
-noCount++;
-const msgs=["Are you sure? 🥺","This letter has feelings too…","Okay but my heart already picked you.","This No button is feeling shy now 🙈"];
-text.innerText=msgs[Math.min(noCount-1,3)];
-document.getElementById("noBtn").style.transform=`translate(${Math.random()*100-50}px,${Math.random()*30-15}px)`;
+text.innerText="This option feels invalid 😌 You have to choose me 🥺";
 }
 
 function yes(){
@@ -237,6 +231,9 @@ text.innerText="I knew it… you were always going to choose yes 😌🤍";
 buttons.innerHTML="";
 document.getElementById("music").play();
 
+text.classList.add("memory-fade");
+
+setTimeout(()=>{
 const wrap=document.createElement("div");
 wrap.className="polaroid-wrap";
 
@@ -251,17 +248,22 @@ wrap.appendChild(tape);
 wrap.appendChild(img);
 document.querySelector(".container").appendChild(wrap);
 
-/* emotional pause */
 setTimeout(()=>{
-    const line=document.createElement("div");
-    line.className="final-line";
-    line.innerText="From now on, let’s choose each other, and keep choosing, every day.";
-    document.querySelector(".container").appendChild(line);
+ const line=document.createElement("div");
+ line.className="final-line";
+ line.innerText="From now on, let’s choose each other, and keep choosing, every day.";
+ document.querySelector(".container").appendChild(line);
+
+ const sign=document.createElement("div");
+ sign.className="signature";
+ sign.innerText="made with love, by Potato 🤍";
+ document.querySelector(".container").appendChild(sign);
 },2000);
+
+},400);
 }
 
 showMemory();
 </script>
-
 </body>
 </html>
