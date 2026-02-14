@@ -88,25 +88,27 @@ transition:.25s;
 button:hover{transform:translateY(-3px);}
 .primary{background:#ff5f7a;color:white;}
 
-.pulse{animation:pulse 1.4s ease infinite;}
-@keyframes pulse{
-0%,100%{transform:scale(1);}
-50%{transform:scale(1.08);}
+.fadeIn{
+opacity:0;
+animation:fadeText 2s ease forwards;
 }
+@keyframes fadeText{to{opacity:1;}}
 
-/* photo drop */
 @keyframes dropIn{
 from{transform:translateY(-40px) rotate(-8deg);opacity:0;}
 to{transform:translateY(0) rotate(-3deg);opacity:1;}
 }
 
-/* handwritten fade */
-.fadeIn{
-opacity:0;
-animation:fadeText 2s ease forwards;
+/* MOBILE FRIENDLY */
+@media (max-width:768px){
+.container{
+padding:24px 18px;
+max-height:95vh;
 }
-@keyframes fadeText{
-to{opacity:1;}
+h1{font-size:2.8rem;}
+#text{font-size:1.15rem;line-height:1.6;}
+.final-photo{width:220px !important;}
+.final-line{font-size:1.6rem !important;line-height:1.4;}
 }
 </style>
 </head>
@@ -121,7 +123,6 @@ to{opacity:1;}
 <div id="buttons"></div>
 </div>
 
-<!-- MUSIC -->
 <audio id="bgMusic" src="music.mp3" loop></audio>
 <audio id="yesMusic" src="music-lyrics.mp3"></audio>
 
@@ -143,7 +144,7 @@ let musicStarted=false;
 function startMusicOnce(){
 if(!musicStarted){
 const m=document.getElementById("bgMusic");
-m.volume=0.10;   // VERY DIM BACKGROUND
+m.volume=0.10;
 m.play();
 musicStarted=true;
 }
@@ -160,7 +161,7 @@ const memories=[
 "After all these little moments,\nI have one tiny question."
 ];
 
-let i=0,noCount=0;
+let i=0;
 const text=document.getElementById("text");
 const buttons=document.getElementById("buttons");
 
@@ -175,137 +176,36 @@ i++;
 i<memories.length?showMemory():question();
 }
 
-/* QUESTION */
 function question(){
 text.className="";
 text.innerText="So… will you be my Valentine? 💖";
 buttons.innerHTML=`
-<button id="yesBtn" class="primary" onclick="yes()">Yes 🤍</button>
-<button id="noBtn" onclick="noGame()">No 🙈</button>
-<button onclick="hintSlide()">I need a hint 👀</button>
-<button onclick="thinkSlide()">Can I think about it? 🤔</button>
-<button onclick="rewardSlide()">Depends… what do I get? 😏</button>
-<button onclick="trapSlide()">This feels like a trap 😄</button>
+<button class="primary" onclick="yes()">Yes 🤍</button>
+<button onclick="question()">No 🙈</button>
 <button onclick="replay()">Replay memories 🧸</button>`;
-noCount=0;
-}
-
-/* NO GAME */
-const noMsgs=[
-"Are you sure? 🥺",
-"This letter has feelings too…",
-"Okay but my heart already picked you.",
-"This No button is feeling shy now 🙈"
-];
-function noGame(){
-noCount++;
-text.innerText=noMsgs[Math.min(noCount-1,noMsgs.length-1)];
-let yes=document.getElementById("yesBtn");
-let no=document.getElementById("noBtn");
-yes.style.transform=`scale(${1+noCount*0.15})`;
-no.style.transform=`scale(${1-noCount*0.15}) translate(${Math.random()*80-40}px,${Math.random()*40-20}px)`;
-if(noCount>4) no.style.display="none";
-}
-
-/* OTHER SLIDES */
-function trapSlide(){
-text.innerText="It is.\nA very cute emotional trap 😌💌";
-buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
-}
-
-function rewardSlide(){
-text.innerText=`You get…
-
-A lifetime subscription to chaos, laughs and cuteness 😄
-
-Baby talks, random runs, fun activities,
-creative little surprises, and basketball matches.
-
-Warm hugs,
-late-night cuddles,
-someone who feeds you food,
-and always saves you the last bite.
-
-Someone who keeps showing effort,
-tries to make you smile,
-and chooses you again and again 🤍`;
-buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
-}
-
-function hintSlide(){
-text.innerText=`Hint? 👀
-
-If someone builds a whole little website
-just to make you smile…
-
-that’s probably the biggest hint already 😌
-
-(and yes… I’m quietly hoping you choose YES 🤍)`;
-buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
-}
-
-function thinkSlide(){
-text.innerText=`Of course, baby… take your time.
-
-But while you think…
-
-you probably won’t find
-this kind of crazy girl anywhere else 😄
-
-Soch lo… 🥺`;
-buttons.innerHTML=`
-<button onclick="dontWant()">I don’t want to 🙈</button>
-<button class="primary pulse" onclick="wantYou()">I want you 🤍</button>`;
-}
-
-function wantYou(){
-text.innerText=`Yaaay 😄💖
-
-Now go back and click YES 🤍`;
-buttons.innerHTML=`<button class="primary" onclick="question()">Take me there ✨</button>`;
-}
-
-function dontWant(){
-text.innerText=`Hmm… that option feels unfair 😌
-
-Maybe give the “I want you 🤍”
-button another look?`;
-buttons.innerHTML=`<button class="primary" onclick="thinkSlide()">Okay okay… back 💌</button>`;
 }
 
 function replay(){
-text.innerText=`💭 Our little memories…
-
-• The magic trick you did.
-• Our Bhimtal run.
-• Flowers outside my office.
-• Cute sweaters.
-• Our dance.
-
-Some moments just feel like us 🤍`;
-buttons.innerHTML=`<button class="primary" onclick="question()">Back to the question 💌</button>`;
+i=0;
+showMemory();
 }
 
-/* YES CINEMATIC ENDING */
+/* YES ENDING */
 function yes(){
 
 text.innerText="I knew it… you were always going to choose yes 😌🤍";
 buttons.innerHTML="";
-text.style.opacity=".7";
 
 const bg=document.getElementById("bgMusic");
 const lyrics=document.getElementById("yesMusic");
 
 let fade=setInterval(()=>{
-if(bg.volume>0.05){
-bg.volume-=0.015;
-}else{
+if(bg.volume>0.05){bg.volume-=0.015;}
+else{
 clearInterval(fade);
 bg.pause();
-
 lyrics.volume=.28;
 lyrics.play();
-
 showFinal();
 }
 },120);
@@ -314,16 +214,26 @@ showFinal();
 function showFinal(){
 
 const wrap=document.createElement("div");
-wrap.innerHTML=`<img src="us.jpg"
+wrap.innerHTML=`<img src="us.jpg" class="final-photo"
 style="width:300px;border:12px solid white;
 box-shadow:0 12px 25px rgba(0,0,0,.25);
 transform:rotate(-3deg);border-radius:4px;
 animation:dropIn .7s ease;">`;
 document.querySelector(".container").appendChild(wrap);
 
+/* mobile auto-scroll */
+setTimeout(()=>{
+document.querySelector(".container")
+.scrollTo({top:document.querySelector(".container").scrollHeight,behavior:"smooth"});
+},300);
+
+/* vibration */
+if(navigator.vibrate) navigator.vibrate(40);
+
+/* handwritten */
 setTimeout(()=>{
 const line=document.createElement("div");
-line.className="fadeIn";
+line.className="fadeIn final-line";
 line.style.fontFamily="'Dancing Script',cursive";
 line.style.fontSize="2.2rem";
 line.style.marginTop="16px";
@@ -331,14 +241,31 @@ line.style.color="#8a3b5d";
 line.innerText="From now on, let’s choose each other, and keep choosing, every day.";
 document.querySelector(".container").appendChild(line);
 
+const extra=document.createElement("div");
+extra.className="fadeIn";
+extra.style.marginTop="18px";
+extra.style.whiteSpace="pre-line";
+extra.innerText=`Little things you do that stay with me…
+
+I love the way you hold my hand while driving.
+The way you call me “Bacche” melts my heart every time.
+Your forehead kisses make me feel safe and cared for.
+The way you feed me feels like love in its simplest form.
+Your worn jackets feel like hugs from you, even when you’re far away.
+When you’re around, time runs too fast.
+When you’re away, it feels the longest.`;
+
+document.querySelector(".container").appendChild(extra);
+
 const sign=document.createElement("div");
 sign.className="fadeIn";
-sign.style.marginTop="10px";
-sign.style.whiteSpace="pre-line";
+sign.style.marginTop="16px";
 sign.style.color="#b07a8f";
+sign.style.whiteSpace="pre-line";
 sign.innerText=`Beba, I like you 🐵
 I just wanted to make you smile.
 Made with love, by Potato 🤍`;
+
 document.querySelector(".container").appendChild(sign);
 
 },1200);
