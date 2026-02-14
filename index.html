@@ -22,24 +22,25 @@ body{
 #hearts{position:fixed;inset:0;pointer-events:none;}
 .heart{
     position:absolute;
-    font-size:18px;
-    opacity:.22;
+    opacity:.18;
     animation:float 10s linear forwards;
 }
 @keyframes float{
-    from{transform:translateY(100vh);}
-    to{transform:translateY(-10vh);opacity:0;}
+from{transform:translateY(100vh);}
+to{transform:translateY(-10vh);opacity:0;}
 }
 
-/* scrapbook card */
+/* scrapbook */
 .container{
     width:min(1050px,95%);
+    max-height:90vh;
+    overflow:auto;
     background:#fff8f3;
     border-radius:22px;
-    padding:38px 50px;
+    padding:34px 50px;
     box-shadow:0 20px 45px rgba(0,0,0,.12);
-    position:relative;
     text-align:center;
+    position:relative;
 }
 .container::before{
     content:"";
@@ -60,17 +61,16 @@ h1{
 
 #text{
     max-width:760px;
-    margin:0 auto 24px;
-    font-size:1.45rem;
-    line-height:1.8;
+    margin:0 auto 20px;
+    font-size:1.38rem;
+    line-height:1.75;
     white-space:pre-line;
 }
 
-/* memory note */
 .memory-note{
     background:#fffdf9;
     border:2px dashed #ffd0dc;
-    padding:22px;
+    padding:20px;
     border-radius:14px;
 }
 
@@ -89,7 +89,9 @@ button{
 button:hover{transform:translateY(-3px);}
 .primary{background:#ff5f7a;color:white;}
 
-.pulse{animation:pulse 1.4s ease infinite;}
+.pulse{
+animation:pulse 1.4s ease infinite;
+}
 @keyframes pulse{
 0%,100%{transform:scale(1);}
 50%{transform:scale(1.08);}
@@ -107,22 +109,36 @@ button:hover{transform:translateY(-3px);}
 <div id="buttons"></div>
 </div>
 
-<audio id="music" src="music.mp3"></audio>
+<audio id="music" src="music.mp3" loop></audio>
 
 <script>
+/* hearts */
 setInterval(()=>{
 let h=document.createElement("div");
 h.className="heart";
 h.innerText="💗";
 h.style.left=Math.random()*100+"vw";
+h.style.fontSize=(14+Math.random()*16)+"px";
 document.getElementById("hearts").appendChild(h);
 setTimeout(()=>h.remove(),10000);
 },900);
 
+/* music start once */
+let musicStarted=false;
+function startMusicOnce(){
+if(!musicStarted){
+let m=document.getElementById("music");
+m.volume=.22;
+m.play();
+musicStarted=true;
+}
+}
+
+/* memories */
 const memories=[
 "I genuinely like you, more than I know how to say sometimes.",
 "Remember that magic trick you did?\nI couldn’t stop smiling after that.",
-"I still remember our run in Bhimtal,\nit felt simple and perfect.",
+"I still remember our run in Bhimtal.\nIt felt simple and perfect.",
 "Flowers outside my office.\nThat moment stayed with me.",
 "Cute sweaters.\nStill adorable.",
 "Our dance on Tanna na na naah…",
@@ -133,13 +149,19 @@ let i=0,noCount=0;
 const text=document.getElementById("text");
 const buttons=document.getElementById("buttons");
 
+/* memory flow */
 function showMemory(){
 text.className="memory-note";
 text.innerText=memories[i];
 buttons.innerHTML=`<button class="primary" onclick="next()">Continue ✨</button>`;
 }
-function next(){ i++; i<memories.length?showMemory():question(); }
+function next(){
+startMusicOnce();
+i++;
+i<memories.length?showMemory():question();
+}
 
+/* question */
 function question(){
 text.className="";
 text.innerText="So… will you be my Valentine? 💖";
@@ -155,27 +177,23 @@ noCount=0;
 }
 
 /* NO game */
-const noMessages=[
+const noMsgs=[
 "Are you sure? 🥺",
 "This letter has feelings too…",
 "Okay but my heart already picked you.",
 "This No button is feeling shy now 🙈"
 ];
-
 function noGame(){
 noCount++;
-text.innerText=noMessages[Math.min(noCount-1,noMessages.length-1)];
-
-const yes=document.getElementById("yesBtn");
-const no=document.getElementById("noBtn");
-
+text.innerText=noMsgs[Math.min(noCount-1,noMsgs.length-1)];
+let yes=document.getElementById("yesBtn");
+let no=document.getElementById("noBtn");
 yes.style.transform=`scale(${1+noCount*0.15})`;
 no.style.transform=`scale(${1-noCount*0.15}) translate(${Math.random()*80-40}px,${Math.random()*40-20}px)`;
-
 if(noCount>4) no.style.display="none";
 }
 
-/* slides */
+/* separate slides */
 function trapSlide(){
 text.innerText="It is.\nA very cute emotional trap 😌💌";
 buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
@@ -222,9 +240,9 @@ buttons.innerHTML=`
 function wantYou(){
 text.innerText=`Yaaay 😄💖
 
-Okay… now one tiny step left.
+Okay… one tiny step left.
 
-Go back and click YES 🤍`;
+Now go back and click YES 🤍`;
 buttons.innerHTML=`<button class="primary" onclick="question()">Take me there ✨</button>`;
 }
 
@@ -252,7 +270,6 @@ buttons.innerHTML=`<button class="primary" onclick="question()">Back to the ques
 function yes(){
 text.innerText="I knew it… you were always going to choose yes 😌🤍";
 buttons.innerHTML="";
-document.getElementById("music").play();
 }
 
 showMemory();
