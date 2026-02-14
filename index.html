@@ -8,22 +8,22 @@
 
 <style>
 body{
-    margin:0;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-family:'Baloo 2', cursive;
-    background:#f7f1f4;
-    overflow:hidden;
+margin:0;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:'Baloo 2',cursive;
+background:#f7f1f4;
+overflow:hidden;
 }
 
 /* floating hearts */
 #hearts{position:fixed;inset:0;pointer-events:none;}
 .heart{
-    position:absolute;
-    opacity:.18;
-    animation:float 10s linear forwards;
+position:absolute;
+opacity:.18;
+animation:float 10s linear forwards;
 }
 @keyframes float{
 from{transform:translateY(100vh);}
@@ -32,59 +32,58 @@ to{transform:translateY(-10vh);opacity:0;}
 
 /* scrapbook card */
 .container{
-    width:min(1050px,95%);
-    max-height:90vh;
-    overflow:auto;
-    background:#fff8f3;
-    border-radius:22px;
-    padding:34px 50px;
-    box-shadow:0 20px 45px rgba(0,0,0,.12);
-    text-align:center;
-    position:relative;
+width:min(1050px,95%);
+max-height:90vh;
+overflow:auto;
+background:#fff8f3;
+border-radius:22px;
+padding:34px 50px;
+box-shadow:0 20px 45px rgba(0,0,0,.12);
+text-align:center;
+position:relative;
 }
 .container::before{
-    content:"";
-    position:absolute;
-    inset:-12px;
-    background:#ffeef4;
-    border-radius:24px;
-    transform:rotate(-1deg);
-    z-index:-1;
+content:"";
+position:absolute;
+inset:-12px;
+background:#ffeef4;
+border-radius:24px;
+transform:rotate(-1deg);
+z-index:-1;
 }
 
 h1{
-    font-family:'Dancing Script', cursive;
-    font-size:4rem;
-    color:#b03a5b;
-    margin:0 0 12px;
+font-family:'Dancing Script',cursive;
+font-size:4rem;
+color:#b03a5b;
+margin:0 0 12px;
 }
 
 #text{
-    max-width:760px;
-    margin:0 auto 20px;
-    font-size:1.38rem;
-    line-height:1.75;
-    white-space:pre-line;
+max-width:760px;
+margin:0 auto 20px;
+font-size:1.38rem;
+line-height:1.75;
+white-space:pre-line;
 }
 
 .memory-note{
-    background:#fffdf9;
-    border:2px dashed #ffd0dc;
-    padding:20px;
-    border-radius:14px;
+background:#fffdf9;
+border:2px dashed #ffd0dc;
+padding:20px;
+border-radius:14px;
 }
 
-/* buttons */
 button{
-    padding:12px 20px;
-    margin:8px;
-    border:none;
-    border-radius:10px;
-    background:#ffe0ea;
-    color:#5b2e2e;
-    font-size:1.05rem;
-    cursor:pointer;
-    transition:.25s;
+padding:12px 20px;
+margin:8px;
+border:none;
+border-radius:10px;
+background:#ffe0ea;
+color:#5b2e2e;
+font-size:1.05rem;
+cursor:pointer;
+transition:.25s;
 }
 button:hover{transform:translateY(-3px);}
 .primary{background:#ff5f7a;color:white;}
@@ -93,6 +92,21 @@ button:hover{transform:translateY(-3px);}
 @keyframes pulse{
 0%,100%{transform:scale(1);}
 50%{transform:scale(1.08);}
+}
+
+/* photo drop */
+@keyframes dropIn{
+from{transform:translateY(-40px) rotate(-8deg);opacity:0;}
+to{transform:translateY(0) rotate(-3deg);opacity:1;}
+}
+
+/* handwritten fade */
+.fadeIn{
+opacity:0;
+animation:fadeText 2s ease forwards;
+}
+@keyframes fadeText{
+to{opacity:1;}
 }
 </style>
 </head>
@@ -107,7 +121,9 @@ button:hover{transform:translateY(-3px);}
 <div id="buttons"></div>
 </div>
 
-<audio id="music" src="music.mp3" loop></audio>
+<!-- MUSIC -->
+<audio id="bgMusic" src="music.mp3" loop></audio>
+<audio id="yesMusic" src="music-lyrics.mp3"></audio>
 
 <script>
 
@@ -126,8 +142,8 @@ setTimeout(()=>h.remove(),10000);
 let musicStarted=false;
 function startMusicOnce(){
 if(!musicStarted){
-let m=document.getElementById("music");
-m.volume=.22;
+const m=document.getElementById("bgMusic");
+m.volume=0.10;   // VERY DIM BACKGROUND
 m.play();
 musicStarted=true;
 }
@@ -138,7 +154,7 @@ const memories=[
 "I genuinely like you, more than I know how to say sometimes.",
 "Remember that magic trick you did?\nI couldn’t stop smiling after that.",
 "I still remember our run in Bhimtal.\nIt felt simple and perfect.",
-"You standing outside my office with flowers.\nThat moment stayed with me.",
+"You standing outside my office with flowers.\nThat way you looked at me stayed with me.",
 "You wearing those cute sweaters I got you,\nlooked ridiculously adorable.",
 "And our dance on Tanna na na naah…\nI still replay that moment in my head sometimes.",
 "After all these little moments,\nI have one tiny question."
@@ -148,7 +164,6 @@ let i=0,noCount=0;
 const text=document.getElementById("text");
 const buttons=document.getElementById("buttons");
 
-/* memories flow */
 function showMemory(){
 text.className="memory-note";
 text.innerText=memories[i];
@@ -160,7 +175,7 @@ i++;
 i<memories.length?showMemory():question();
 }
 
-/* question */
+/* QUESTION */
 function question(){
 text.className="";
 text.innerText="So… will you be my Valentine? 💖";
@@ -175,27 +190,24 @@ buttons.innerHTML=`
 noCount=0;
 }
 
-/* NO game */
+/* NO GAME */
 const noMsgs=[
 "Are you sure? 🥺",
 "This letter has feelings too…",
 "Okay but my heart already picked you.",
 "This No button is feeling shy now 🙈"
 ];
-
 function noGame(){
 noCount++;
 text.innerText=noMsgs[Math.min(noCount-1,noMsgs.length-1)];
 let yes=document.getElementById("yesBtn");
 let no=document.getElementById("noBtn");
-
 yes.style.transform=`scale(${1+noCount*0.15})`;
 no.style.transform=`scale(${1-noCount*0.15}) translate(${Math.random()*80-40}px,${Math.random()*40-20}px)`;
-
 if(noCount>4) no.style.display="none";
 }
 
-/* slides */
+/* OTHER SLIDES */
 function trapSlide(){
 text.innerText="It is.\nA very cute emotional trap 😌💌";
 buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
@@ -223,15 +235,12 @@ buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</butto
 function hintSlide(){
 text.innerText=`Hint? 👀
 
-Okay… here’s a tiny secret.
-
 If someone builds a whole little website
 just to make you smile…
 
 that’s probably the biggest hint already 😌
 
 (and yes… I’m quietly hoping you choose YES 🤍)`;
-
 buttons.innerHTML=`<button class="primary" onclick="question()">Back 💌</button>`;
 }
 
@@ -251,8 +260,6 @@ buttons.innerHTML=`
 
 function wantYou(){
 text.innerText=`Yaaay 😄💖
-
-Okay… one tiny step left.
 
 Now go back and click YES 🤍`;
 buttons.innerHTML=`<button class="primary" onclick="question()">Take me there ✨</button>`;
@@ -279,27 +286,45 @@ Some moments just feel like us 🤍`;
 buttons.innerHTML=`<button class="primary" onclick="question()">Back to the question 💌</button>`;
 }
 
-/* YES ending */
+/* YES CINEMATIC ENDING */
 function yes(){
+
 text.innerText="I knew it… you were always going to choose yes 😌🤍";
 buttons.innerHTML="";
 text.style.opacity=".7";
 
-setTimeout(()=>{
+const bg=document.getElementById("bgMusic");
+const lyrics=document.getElementById("yesMusic");
+
+let fade=setInterval(()=>{
+if(bg.volume>0.05){
+bg.volume-=0.015;
+}else{
+clearInterval(fade);
+bg.pause();
+
+lyrics.volume=.28;
+lyrics.play();
+
+showFinal();
+}
+},120);
+}
+
+function showFinal(){
+
 const wrap=document.createElement("div");
-wrap.style.marginTop="20px";
-wrap.innerHTML=`
-<img src="us.jpg" style="
-width:300px;
-border:12px solid white;
+wrap.innerHTML=`<img src="us.jpg"
+style="width:300px;border:12px solid white;
 box-shadow:0 12px 25px rgba(0,0,0,.25);
-transform:rotate(-3deg);
-border-radius:4px;">`;
+transform:rotate(-3deg);border-radius:4px;
+animation:dropIn .7s ease;">`;
 document.querySelector(".container").appendChild(wrap);
 
 setTimeout(()=>{
 const line=document.createElement("div");
-line.style.fontFamily="'Dancing Script', cursive";
+line.className="fadeIn";
+line.style.fontFamily="'Dancing Script',cursive";
 line.style.fontSize="2.2rem";
 line.style.marginTop="16px";
 line.style.color="#8a3b5d";
@@ -307,6 +332,7 @@ line.innerText="From now on, let’s choose each other, and keep choosing, every
 document.querySelector(".container").appendChild(line);
 
 const sign=document.createElement("div");
+sign.className="fadeIn";
 sign.style.marginTop="10px";
 sign.style.whiteSpace="pre-line";
 sign.style.color="#b07a8f";
@@ -314,12 +340,12 @@ sign.innerText=`Beba, I like you 🐵
 I just wanted to make you smile.
 Made with love, by Potato 🤍`;
 document.querySelector(".container").appendChild(sign);
-},2000);
 
-},400);
+},1200);
 }
 
 showMemory();
 </script>
+
 </body>
 </html>
